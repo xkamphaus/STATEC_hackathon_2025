@@ -1,0 +1,1 @@
+# STATEC_hackathon_2025
