@@ -56,7 +56,3 @@ body {
     margin-right: 8px;
     cursor: pointer;
 }
-
-.leaflet-marker-icon {
-    filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.233));
-}

@@ -83,42 +83,42 @@ const pharmacyIcon = L.icon({
 });
 const hebergementIcon = L.icon({
     iconUrl: 'icons/icon_1_accommodation.svg',
-    iconSize: [20, 20],
+    iconSize: [25, 25],
     iconAnchor: [10, 10],
     popupAnchor: [1, -34],
     shadowSize: [50, 50]
 });
 const logementEncadreIcon = L.icon({
     iconUrl: 'icons/icon_2_supervised.svg',
-    iconSize: [20, 20],
+    iconSize: [25, 25],
     iconAnchor: [10, 10],
     popupAnchor: [1, -34],
     shadowSize: [50, 50]
 });
 const centreJourIcon = L.icon({
     iconUrl: 'icons/icon_3_daycentre.svg',
-    iconSize: [20, 20],
+    iconSize: [25, 25],
     iconAnchor: [10, 10],
     popupAnchor: [1, -34],
     shadowSize: [50, 50]
 });
 const aktivPlusIcon = L.icon({
     iconUrl: 'icons/icon_4_aktivplus.svg',
-    iconSize: [20, 20],
+    iconSize: [25, 25],
     iconAnchor: [10, 10],
     popupAnchor: [1, -34],
     shadowSize: [50, 50]
 });
 const telealarmIcon = L.icon({
     iconUrl: 'icons/icon_7_telealarm.svg',
-    iconSize: [20, 20],
+    iconSize: [25, 25],
     iconAnchor: [10, 10],
     popupAnchor: [1, -34],
     shadowSize: [50, 50]
 });
 const activitiesIcon = L.icon({
     iconUrl: 'icons/icon_8_activities.svg',
-    iconSize: [20, 20],
+    iconSize: [25, 25],
     iconAnchor: [10, 10],
     popupAnchor: [1, -34],
     shadowSize: [50, 50]
@@ -232,7 +232,7 @@ function style(id_to_index, feature, min, max) {
 	return {
 			color: '#1a1a1a', //'#3388ff'
 			weight: 0.5,
-			fillOpacity: 0.5,
+			fillOpacity: 1,
 			fillColor: fillColor
 		};
 }
@@ -243,7 +243,7 @@ function highlightFeature(e) {
     layer.setStyle({
         weight: 3,
         color: '#362eff', //'#2700af', //'#ff7800'
-        fillOpacity: 0.5
+        fillOpacity: 1
     });
     layer.bringToFront();
 }
