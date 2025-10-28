@@ -19,7 +19,6 @@ const markers = {
     ]
 };
 
-
 let selection = {'gender': 'Total', 'age': '60 years or over'};
 
 let geojsonLayer;
@@ -110,33 +109,29 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
 }).addTo(map);
 
-function getColorByValue(value) {
-  value = Math.max(0, Math.min(100, value));
-  const ratio = value / 100;
-  
+function getColorByValue(ratio) {
   // White: #FFFFFF, Red: #FF0000
   const g = Math.floor(255 * (1 - ratio)).toString(16).padStart(2, '0');
-  const b = Math.floor(255 * (1 - ratio)).toString(16).padStart(2, '0');
-  
-  return `#FF${g}${b}`;
+  return `#ff${g}${g}`;
 }
 
 // Style function for GeoJSON features
 function style(id_to_index, feature, min, max) {
-	fillColor = '#3388ff';
+	fillColor = '#888888';
 	if (id_to_index && feature) {		
 		console.log(feature.properties['LAU2']);
 		id = parseInt(feature.properties['LAU2']);
 		index = id_to_index[id]
 		console.log(id, index)
 		if (!isNaN(index)) {
-			fillColor = getColorByValue((index-min)/(max-min))
-		}
+			console.log(getColorByValue((index-min)*1.0/(max-min)), min, max);
+			fillColor = getColorByValue((index-min)*1.0/(max-min));
+		};
 	}; 
 	return {
 			color: '#3388ff',
 			weight: 2,
-			fillOpacity: 0.3,
+			fillOpacity: 0.5,
 			fillColor: fillColor
 		};
 }
@@ -238,7 +233,7 @@ function updateVisualization(propertyName, propertyValue) {
 			!isNaN(pop_data['ratio'])) {
 			min = Math.min(min, value);
 			max = Math.max(max, value);
-			id_to_index[pop_data['geo_id']]=value;
+			id_to_index[parseInt(pop_data['geo_id'])]=value;
 		}
 	});
    
