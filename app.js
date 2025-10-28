@@ -179,8 +179,45 @@ document.getElementById('mark_activities').addEventListener('change', function(e
     });
 });
 
-// Variable to store the GeoJSON layer
+let selection = {'gender': 'total'};
+
 let geojsonLayer;
+
+// Function to update the visualization with a different property
+function updateVisualization(propertyName, propertyValue) {
+    if (!geojsonData) return;
+   
+    selection[propertyName]= propertyValue;
+   
+    // Remove existing layer
+    if (geojsonLayer) {
+        map.removeLayer(geojsonLayer);
+    }
+   
+    // Calculate new min/max
+    const minMax = getMinMax(geojsonData, propertyName);
+   
+    // Add new layer with updated colors
+    geojsonLayer = L.geoJSON(geojsonData, {
+        style: (feature) => style(feature, minMax, propertyName),
+        onEachFeature: onEachFeature
+    }).addTo(map);
+   
+    // Update legend
+    map.eachLayer(layer => {
+        if (layer instanceof L.Control && layer.getContainer().className.includes('legend')) {
+            map.removeControl(layer);
+        }
+    });
+    addLegend(minMax, propertyName);
+};
+ 
+// Add event listeners to all radio buttons
+document.querySelectorAll('input[name="radio_gender"]').forEach(radio => {
+  radio.addEventListener('change', function(e) 
+  {updateVisualization('gender', e.target.value)});
+});
+ 
 
 // Load and display the GeoJSON file
 fetch('assets/LIMADM_COMMUNES.geojson')
@@ -206,3 +243,52 @@ fetch('assets/LIMADM_COMMUNES.geojson')
         console.error('Error loading GeoJSON:', error);
         alert('Error loading communes data. Please check that assets/communes.json exists.');
     });
+
+
+
+// Function to update the visualization with a different property
+function updateVisualization(propertyName) {
+    if (!geojsonData) return;
+   
+    currentProperty = propertyName;
+   
+    // Remove existing layer
+    if (geojsonLayer) {
+        map.removeLayer(geojsonLayer);
+    }
+   
+    // Calculate new min/max
+    const minMax = getMinMax(geojsonData, propertyName);
+   
+    // Add new layer with updated colors
+    geojsonLayer = L.geoJSON(geojsonData, {
+        style: (feature) => style(feature, minMax, propertyName),
+        onEachFeature: onEachFeature
+    }).addTo(map);
+   
+    // Update legend
+    map.eachLayer(layer => {
+        if (layer instanceof L.Control && layer.getContainer().className.includes('legend')) {
+            map.removeControl(layer);
+        }
+    });
+    addLegend(minMax, propertyName);
+}
+ 
+// Example: Add dropdown to switch between different properties
+// You can add this to your HTML:
+/*
+<select id="propertySelect" style="position: absolute; top: 10px; right: 10px; z-index: 1000; padding: 5px;">
+    <option value="population">Population</option>
+    <option value="age_ratio">Age Ratio</option>
+    <option value="density">Density</option>
+</select>
+*/
+ 
+// And add this event listener:
+/*
+document.getElementById('propertySelect').addEventListener('change', function(e) {
+    updateVisualization(e.target.value);
+});
+*/
+ 
