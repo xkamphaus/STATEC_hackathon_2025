@@ -38,3 +38,10 @@ write.csv2(df_cl, paste0(file_dir, "pharmacies_latlon.csv"), row.names = F)
 df <- read.csv(paste0(file_dir, "population_per_commune.csv"))
 df_cl <- df |> mutate(ratio = str_replace(ratio, ",", "."))
 write.csv2(df_cl, paste0(file_dir, "population_statec.csv"), row.names = F)
+
+df <- read.csv(paste0(file_dir, "hospitals_luxembourg.csv"))
+df_cl <- df |>
+  rename(lat = latitude, lon = longitude) |>
+  mutate(lat = as.character(lat),
+         lon = as.character(lon))
+write.csv2(df_cl, paste0(file_dir, "hospitals_latlon.csv"), row.names = F)

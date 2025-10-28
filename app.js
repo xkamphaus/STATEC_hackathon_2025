@@ -11,18 +11,7 @@ const map = L.map('map', {
 }).setView([49.6, 6.1], 10);
 
 // Predefined markers for each option
-const markers = {
-    hospitals: [
-        //L.marker([49.61, 6.13]).bindPopup('Marker 1-1'),
-		L.marker([49.618701, 6.101091]).bindPopup('Centre Hospitalier de Luxembourg (CHL)'),
-		L.marker([49.853445, 6.09465]).bindPopup('Centre Hospitalier du Nord (CHdN)'),
-		L.marker([49.632902, 6.176345]).bindPopup('Hôpital Kirchberg (HRS)'),
-		L.marker([49.501616, 5.98207]).bindPopup('Centre Hospitalier Émile Mayrisch (CHEM)'),
-		L.marker([49.633, 6.159]).bindPopup('Clinique Bohler (Hôpitaux Robert Schuman Group)'),
-		L.marker([49.60389, 6.1289]).bindPopup('ZithaKlinik (Hôpitaux Robert Schuman Group)')
-
-    ]
-};
+const markers = {};
 
 let selection = {'gender': 'Total', 'age': '60 years or over'};
 
@@ -146,10 +135,18 @@ fetchArray('assets/pharmacies_latlon.csv').then(pharmacies => {
 	//pharm_markers.forEach(marker => marker.addTo(map)); //the pharmacy markers should not be selected by default
 });
 
+fetchArray('assets/hospitals_latlon.csv').then(hospitals => {
+    hospital_markers = [];
+	hospitals.forEach(hospital => {
+		hospital_markers.push(L.marker([hospital['lat'], hospital['lon']]).bindPopup(hospital['name']).setIcon(hospitalIcon));
+	});
+	markers['hospitals'] = hospital_markers;
+});
+
 fetchArray('assets/hebergements_latlon.csv').then(hebergements => {
     heb_markers = [];
 	hebergements.forEach(hebergement => {
-		heb_markers.push(L.marker([hebergement['lat'], hebergement['lon']]).bindPopup(hebergement['Nom']).setIcon(hebergementIcon));
+		heb_markers.push(L.marker([hebergement['lat'], hebergement['lon']]).bindPopup(hebergement['name']).setIcon(hebergementIcon));
 	});
 	markers['hebergements'] = heb_markers;
 });
@@ -194,7 +191,7 @@ fetchArray('assets/logementsEncadres_latlon.csv').then(logementsEncadres => {
 	markers['logementsEncadres'] = log_markers;
 });
 
-updateMarkerIcons(markers.hospitals, hospitalIcon);
+//updateMarkerIcons(markers.hospitals, hospitalIcon);
 
  
 fetchArray('assets/population_statec.csv').then(pop_ratios => {popRatioData = pop_ratios});
@@ -227,7 +224,7 @@ function style(id_to_index, feature, min, max) {
 		};
 	}; 
 	return {
-			color: '#ff7800', //'#3388ff'
+			color: '#3388ff', //'#3388ff'
 			weight: 2,
 			fillOpacity: 0.5,
 			fillColor: fillColor
@@ -239,7 +236,7 @@ function highlightFeature(e) {
     const layer = e.target;
     layer.setStyle({
         weight: 3,
-        color: '#3388ff', //'#ff7800'
+        color: '#ff7800', //'#ff7800'
         fillOpacity: 0.5
     });
     layer.bringToFront();

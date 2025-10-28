@@ -4,7 +4,7 @@ run with python -m http.server 8000
 
 ### ToDos
 
-- add activities / other excel based stuff from Nour and Zeno -> add instead of Option 3
+- add activities / other excel based stuff from Nour and Zeno -> add instead of Option 3 (done)
 
 - add something else to the index other than age / gender ratio (like distance to hospitals, forestation, ...)
 
