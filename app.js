@@ -69,7 +69,7 @@ function updateMarkerIcons(markerGroup, icon) {
 
 const hospitalIcon = L.icon({
     iconUrl: 'icons/hospital.svg',
-    iconSize: [40, 40],
+    iconSize: [30, 30],
     iconAnchor: [20, 20],
     popupAnchor: [1, -34],
     shadowSize: [50, 50]
@@ -205,9 +205,15 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
 }).addTo(map);
 
 function getColorByValue(ratio) {
-  // White: #FFFFFF, Red: #FF0000
-  const g = Math.floor(255 * (1 - ratio)).toString(16).padStart(2, '0');
-  return `#ff${g}${g}`;
+  // White: #FFFFFF, Red: #ffd500  #FF0000,   rgb(194,167,0)
+  //const g = Math.floor(255 * (1 - ratio)).toString(16).padStart(2, '0');
+  //return `#ff${g}${g}`;
+
+  const r = Math.floor(255 - (255 - 223) * ratio);; // Red stays at 255
+  const g = Math.floor(255 - (255 - 192) * ratio); // Green goes from 255 to 213
+  const b = Math.floor(255 - 255 * ratio); // Blue goes from 255 to 0
+  
+  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }
 
 // Style function for GeoJSON features
@@ -224,8 +230,8 @@ function style(id_to_index, feature, min, max) {
 		};
 	}; 
 	return {
-			color: '#3388ff', //'#3388ff'
-			weight: 2,
+			color: '#1a1a1a', //'#3388ff'
+			weight: 0.5,
 			fillOpacity: 0.5,
 			fillColor: fillColor
 		};
@@ -236,7 +242,7 @@ function highlightFeature(e) {
     const layer = e.target;
     layer.setStyle({
         weight: 3,
-        color: '#ff7800', //'#ff7800'
+        color: '#362eff', //'#2700af', //'#ff7800'
         fillOpacity: 0.5
     });
     layer.bringToFront();
