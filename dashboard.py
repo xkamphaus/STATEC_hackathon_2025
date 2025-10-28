@@ -1,29 +1,48 @@
-###### import libraries ######
+import dash
+from dash import html
+import dash_leaflet as dl
+import json
 
-from dash import Dash, html, dcc
-import dash_bootstrap_components as dbc
-import pandas as pd
+import geopandas as gpd
 
-###### import the data ######
+def load_shapefile(shapefile_path):
+    """
+    Load a shapefile and convert it to GeoJSON format
 
-# URL of the CSV file
-url = "https://lustat.statec.lu/rest/data/LU1,DF_B1100,1.0/.A?startPeriod=2015&endPeriod=2024&lastNObservations=5&dimensionAtObservation=AllDimensions&format=csv"
+    Args:
+        shapefile_path: Path to the .shp file
 
-# Reading the CSV file into a DataFrame
-data = pd.read_csv(url)
+    Returns:
+        GeoJSON dictionary
+    """
+    gdf = gpd.read_file(shapefile_path)
+    # Convert to WGS84 (EPSG:4326) for web mapping
+    gdf = gdf.to_crs(epsg=4326)
+    return json.loads(gdf.to_json())
 
-# Display first few rows of the DataFrame
-print(data.head())
 
+geojson_data = load_shapefile('assets/LIMADM_COMMUNES.shp')
 
-###### create the dashboard ######
+# Initialize the Dash app
+app = dash.Dash(__name__)
 
-app = Dash(__name__)
+# Load the GeoJSON file
+# Create the app layout
+app.layout = html.Div([
+    dl.Map(
+        children=[
+            dl.TileLayer(),
+            dl.GeoJSON(
+                data=geojson_data,
+                id="communes-geojson",
+                options=dict(style=dict(color='#3388ff', weight=2, fillOpacity=0.3))
+            )
+        ],
+        center=[49.6, 6.1],
+        zoom=10,
+        style={'width': '100%', 'height': '100vh'}
+    )
+], style={'margin': 0, 'padding': 0})
 
-# app.layout = html.Div()
-app.layout = dbc.Container(html.P("My awesome dashboard will be here."),
-                           fluid=True)
-
-# if __name__ == "__main__":
-#     app.run(debug=True, port=8050)
-
+if __name__ == '__main__':
+    app.run(debug=True, port=8050)

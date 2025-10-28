@@ -1,6 +1,22 @@
 // Initialize the map centered on Luxembourg
 const map = L.map('map').setView([49.6, 6.1], 10);
 
+// Predefined markers for each option
+const markers = {
+    option1: [
+        L.marker([49.61, 6.13]).bindPopup('Marker 1-1'),
+        L.marker([49.62, 6.15]).bindPopup('Marker 1-2')
+    ],
+    option2: [
+        L.marker([49.59, 6.11]).bindPopup('Marker 2-1'),
+        L.marker([49.60, 6.09]).bindPopup('Marker 2-2')
+    ],
+    option3: [
+        L.marker([49.58, 6.12]).bindPopup('Marker 3-1'),
+        L.marker([49.57, 6.14]).bindPopup('Marker 3-2')
+    ]
+};
+
 // Add OpenStreetMap tile layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -50,6 +66,41 @@ function onEachFeature(feature, layer) {
         layer.bindPopup(popupContent);
     }
 }
+
+
+// Add all markers to map initially
+Object.values(markers).flat().forEach(marker => marker.addTo(map));
+
+// Checkbox event listeners
+document.getElementById('mark_hospitals').addEventListener('change', function(e) {
+    markers.option1.forEach(marker => {
+        if (e.target.checked) {
+            marker.addTo(map);
+        } else {
+            map.removeLayer(marker);
+        }
+    });
+});
+
+document.getElementById('mark_pharmacies').addEventListener('change', function(e) {
+    markers.option2.forEach(marker => {
+        if (e.target.checked) {
+            marker.addTo(map);
+        } else {
+            map.removeLayer(marker);
+        }
+    });
+});
+
+document.getElementById('mark_activities').addEventListener('change', function(e) {
+    markers.option3.forEach(marker => {
+        if (e.target.checked) {
+            marker.addTo(map);
+        } else {
+            map.removeLayer(marker);
+        }
+    });
+});
 
 // Variable to store the GeoJSON layer
 let geojsonLayer;
