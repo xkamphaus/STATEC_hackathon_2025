@@ -19,6 +19,13 @@ const markers = {
     ]
 };
 
+
+let selection = {'gender': 'Total', 'age': '60 years or over'};
+
+let geojsonLayer;
+let geojsonData;
+let popRatioData;
+
 async function fetchArray(filename) {
     try {
         const response = await fetch(filename);
@@ -31,18 +38,22 @@ async function fetchArray(filename) {
             throw new Error('CSV file is empty');
         }
         
+		function removeQuotes(str) {
+			return str.replace(/^['"`]|['"`]$/g, '');
+		}
+
         // Extract headers
-        const headers = lines[0].split(',').map(header => header.trim());
+        const headers = lines[0].split(',').map(header => removeQuotes(header.trim()));
         
         // Create array of result objects
         const results = [];
         
         for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(',').map(value => value.trim());
+            const values = lines[i].split(',').map(value => removeQuotes(value.trim()));
             const result = {};
             
             headers.forEach((header, index) => {
-                result[header] = values[index] || '';
+                result[header] = removeQuotes(values[index] || '');
             });
             
 			
@@ -88,9 +99,10 @@ fetchArray('assets/pharmacies_luxembourg_lu.csv').then(pharmacies => {
 	markers['pharmacies'] = pharm_markers;
 	pharm_markers.forEach(marker => marker.addTo(map));
 });
-
 updateMarkerIcons(markers.hospitals, hospitalIcon);
 
+ 
+fetchArray('assets/population_per_commune.csv').then(pop_ratios => {popRatioData = pop_ratios});
 
 // Add OpenStreetMap tile layer
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -98,16 +110,35 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
 }).addTo(map);
 
-// age_ratio
+function getColorByValue(value) {
+  value = Math.max(0, Math.min(100, value));
+  const ratio = value / 100;
+  
+  // White: #FFFFFF, Red: #FF0000
+  const g = Math.floor(255 * (1 - ratio)).toString(16).padStart(2, '0');
+  const b = Math.floor(255 * (1 - ratio)).toString(16).padStart(2, '0');
+  
+  return `#FF${g}${b}`;
+}
 
 // Style function for GeoJSON features
-function style(feature) {
-    return {
-        color: '#3388ff',
-        weight: 2,
-        fillOpacity: 0.3,
-        fillColor: '#3388ff'
-    };
+function style(id_to_index, feature, min, max) {
+	fillColor = '#3388ff';
+	if (id_to_index && feature) {		
+		console.log(feature.properties['LAU2']);
+		id = parseInt(feature.properties['LAU2']);
+		index = id_to_index[id]
+		console.log(id, index)
+		if (!isNaN(index)) {
+			fillColor = getColorByValue((index-min)/(max-min))
+		}
+	}; 
+	return {
+			color: '#3388ff',
+			weight: 2,
+			fillOpacity: 0.3,
+			fillColor: fillColor
+		};
 }
 
 // Hover effect
@@ -179,14 +210,13 @@ document.getElementById('mark_activities').addEventListener('change', function(e
     });
 });
 
-let selection = {'gender': 'total'};
-
-let geojsonLayer;
 
 // Function to update the visualization with a different property
 function updateVisualization(propertyName, propertyValue) {
     if (!geojsonData) return;
+	if (!popRatioData) return;
    
+    
     selection[propertyName]= propertyValue;
    
     // Remove existing layer
@@ -194,22 +224,39 @@ function updateVisualization(propertyName, propertyValue) {
         map.removeLayer(geojsonLayer);
     }
    
-    // Calculate new min/max
-    const minMax = getMinMax(geojsonData, propertyName);
+    
+// Calculate min and max values from your data
+	//function getFilteredMinMax(selection, data, propertyName) {
+    let min = Infinity;
+    let max = -Infinity;
+	id_to_index = {};
+	
+	popRatioData.forEach(pop_data => {
+		const value = parseFloat(pop_data['ratio']);
+		if (selection['gender'].toLowerCase() == pop_data['sex'].toLowerCase() &&
+			selection['age'].toLowerCase()== pop_data['age_class'].toLowerCase() && 
+			!isNaN(pop_data['ratio'])) {
+			min = Math.min(min, value);
+			max = Math.max(max, value);
+			id_to_index[pop_data['geo_id']]=value;
+		}
+	});
    
+    console.log(min, max, id_to_index);
     // Add new layer with updated colors
     geojsonLayer = L.geoJSON(geojsonData, {
-        style: (feature) => style(feature, minMax, propertyName),
+        style: (feature) => style(id_to_index, feature, min, max),
         onEachFeature: onEachFeature
     }).addTo(map);
    
+   /*
     // Update legend
     map.eachLayer(layer => {
         if (layer instanceof L.Control && layer.getContainer().className.includes('legend')) {
             map.removeControl(layer);
         }
     });
-    addLegend(minMax, propertyName);
+    //addLegend(minMax, propertyName);*/
 };
  
 // Add event listeners to all radio buttons
@@ -217,7 +264,7 @@ document.querySelectorAll('input[name="radio_gender"]').forEach(radio => {
   radio.addEventListener('change', function(e) 
   {updateVisualization('gender', e.target.value)});
 });
- 
+
 
 // Load and display the GeoJSON file
 fetch('assets/LIMADM_COMMUNES.geojson')
@@ -228,6 +275,7 @@ fetch('assets/LIMADM_COMMUNES.geojson')
         return response.json();
     })
     .then(data => {
+		geojsonData = data;
         // Add GeoJSON layer to map
         geojsonLayer = L.geoJSON(data, {
             style: style,
@@ -243,52 +291,3 @@ fetch('assets/LIMADM_COMMUNES.geojson')
         console.error('Error loading GeoJSON:', error);
         alert('Error loading communes data. Please check that assets/communes.json exists.');
     });
-
-
-
-// Function to update the visualization with a different property
-function updateVisualization(propertyName) {
-    if (!geojsonData) return;
-   
-    currentProperty = propertyName;
-   
-    // Remove existing layer
-    if (geojsonLayer) {
-        map.removeLayer(geojsonLayer);
-    }
-   
-    // Calculate new min/max
-    const minMax = getMinMax(geojsonData, propertyName);
-   
-    // Add new layer with updated colors
-    geojsonLayer = L.geoJSON(geojsonData, {
-        style: (feature) => style(feature, minMax, propertyName),
-        onEachFeature: onEachFeature
-    }).addTo(map);
-   
-    // Update legend
-    map.eachLayer(layer => {
-        if (layer instanceof L.Control && layer.getContainer().className.includes('legend')) {
-            map.removeControl(layer);
-        }
-    });
-    addLegend(minMax, propertyName);
-}
- 
-// Example: Add dropdown to switch between different properties
-// You can add this to your HTML:
-/*
-<select id="propertySelect" style="position: absolute; top: 10px; right: 10px; z-index: 1000; padding: 5px;">
-    <option value="population">Population</option>
-    <option value="age_ratio">Age Ratio</option>
-    <option value="density">Density</option>
-</select>
-*/
- 
-// And add this event listener:
-/*
-document.getElementById('propertySelect').addEventListener('change', function(e) {
-    updateVisualization(e.target.value);
-});
-*/
- 

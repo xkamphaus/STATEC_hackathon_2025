@@ -1,4 +1,4 @@
-"time_period","geo_id","geographic.level","age","age.class","sex","obs_value","pop_obs_value","pop_age_obs_value","ratio"
+"time_period","geo_id","geographic_level","age","age_class","sex","obs_value","pop_obs_value","pop_age_obs_value","ratio"
 2021,"0807","Wiltz","Y55T59","From 55 to 59 years","Female",252,7697,526,47.9
 2021,"0202","Differdange","Y40T44","From 40 to 44 years","Female",1032,28532,2088,49.4
 2021,"0604","Erpeldange-sur-Sûre","Y30T34","From 30 to 34 years","Female",82,2435,165,49.7
