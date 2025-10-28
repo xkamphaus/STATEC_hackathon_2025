@@ -19,9 +19,9 @@ const markers = {
     ]
 };
 
-async function createPharmacies() {
+async function fetchArray(filename) {
     try {
-        const response = await fetch('assets/pharmacies_luxembourg_lu.csv');
+        const response = await fetch(filename);
         const csvData = await response.text();
         
         // Split into lines and remove empty lines
@@ -34,22 +34,22 @@ async function createPharmacies() {
         // Extract headers
         const headers = lines[0].split(',').map(header => header.trim());
         
-        // Create array of pharmacy objects
-        const pharmacies = [];
+        // Create array of result objects
+        const results = [];
         
         for (let i = 1; i < lines.length; i++) {
             const values = lines[i].split(',').map(value => value.trim());
-            const pharmacy = {};
+            const result = {};
             
             headers.forEach((header, index) => {
-                pharmacy[header] = values[index] || '';
+                result[header] = values[index] || '';
             });
             
 			
-            pharmacies.push(L.marker([pharmacy['lat'], pharmacy['lon']]).bindPopup(pharmacy['name']),);
+            results.push(result);
         }
         
-        return pharmacies;
+        return results;
         
     } catch (error) {
         console.error('Error reading CSV file:', error.message);
@@ -62,13 +62,6 @@ function updateMarkerIcons(markerGroup, icon) {
         marker.setIcon(icon);
     });
 }
-
-createPharmacies().then(pharmacies => {
-    console.log('Pharmacies array:', pharmacies);
-    console.log(`Total pharmacies: ${pharmacies.length}`);
-	markers['pharmacies'] = pharmacies;
-	updateMarkerIcons(markers.pharmacies, pharmacyIcon);
-});
 
 const hospitalIcon = L.icon({
     iconUrl: 'icons/hospital.svg',
@@ -84,6 +77,18 @@ const pharmacyIcon = L.icon({
     popupAnchor: [1, -34],
     shadowSize: [50, 50]
 });
+
+fetchArray('assets/pharmacies_luxembourg_lu.csv').then(pharmacies => {
+    console.log('Pharmacies array:', pharmacies);
+    console.log(`Total pharmacies: ${pharmacies.length}`);
+	pharm_markers = [];
+	pharmacies.forEach(pharmacy => {
+		pharm_markers.push(L.marker([pharmacy['lat'], pharmacy['lon']]).bindPopup(pharmacy['name']).setIcon(pharmacyIcon));
+	});
+	markers['pharmacies'] = pharm_markers;
+	pharm_markers.forEach(marker => marker.addTo(map));
+});
+
 updateMarkerIcons(markers.hospitals, hospitalIcon);
 
 
