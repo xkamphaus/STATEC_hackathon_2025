@@ -13,21 +13,63 @@ const markers = {
 		L.marker([49.60389, 6.1289]).bindPopup('ZithaKlinik (Hôpitaux Robert Schuman Group)')
 
     ],
-    pharmacies: [
-        L.marker([49.59, 6.11]).bindPopup('Pharmacy 2-1'),
-        L.marker([49.60, 6.09]).bindPopup('Pharmacy 2-2')
-    ],
     option3: [
         L.marker([49.58, 6.12]).bindPopup('Marker 3-1'),
         L.marker([49.57, 6.14]).bindPopup('Marker 3-2')
     ]
 };
 
+async function createPharmacies() {
+    try {
+        const response = await fetch('assets/pharmacies_luxembourg_lu.csv');
+        const csvData = await response.text();
+        
+        // Split into lines and remove empty lines
+        const lines = csvData.split('\n').filter(line => line.trim() !== '');
+        
+        if (lines.length === 0) {
+            throw new Error('CSV file is empty');
+        }
+        
+        // Extract headers
+        const headers = lines[0].split(',').map(header => header.trim());
+        
+        // Create array of pharmacy objects
+        const pharmacies = [];
+        
+        for (let i = 1; i < lines.length; i++) {
+            const values = lines[i].split(',').map(value => value.trim());
+            const pharmacy = {};
+            
+            headers.forEach((header, index) => {
+                pharmacy[header] = values[index] || '';
+            });
+            
+			
+            pharmacies.push(L.marker([pharmacy['lat'], pharmacy['lon']]).bindPopup(pharmacy['name']),);
+        }
+        
+        return pharmacies;
+        
+    } catch (error) {
+        console.error('Error reading CSV file:', error.message);
+        return [];
+    }
+}
+
 function updateMarkerIcons(markerGroup, icon) {
     markerGroup.forEach(marker => {
         marker.setIcon(icon);
     });
 }
+
+createPharmacies().then(pharmacies => {
+    console.log('Pharmacies array:', pharmacies);
+    console.log(`Total pharmacies: ${pharmacies.length}`);
+	markers['pharmacies'] = pharmacies;
+	updateMarkerIcons(markers.pharmacies, pharmacyIcon);
+});
+
 const hospitalIcon = L.icon({
     iconUrl: 'icons/hospital.svg',
     iconSize: [40, 40],
@@ -43,7 +85,6 @@ const pharmacyIcon = L.icon({
     shadowSize: [50, 50]
 });
 updateMarkerIcons(markers.hospitals, hospitalIcon);
-updateMarkerIcons(markers.pharmacies, pharmacyIcon);
 
 
 // Add OpenStreetMap tile layer
