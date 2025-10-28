@@ -1,0 +1,32 @@
+<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .icon-bg { fill: #f0f4f8; }
+      .icon-main { fill: #4a90e2; }
+      .icon-accent { fill: #e94b3c; }
+      .icon-secondary { fill: #5ab98d; }
+      .icon-warning { fill: #f39c12; }
+      .label-text { font-family: Arial, sans-serif; font-size: 10px; fill: #333; text-anchor: middle; }
+      .label-bold { font-weight: bold; }
+    </style>
+  </defs>
+  
+  <g transform="translate(50, 50)">
+    <circle class="icon-bg" cx="0" cy="0" r="38"/>
+    <!-- Group of people (consultation) -->
+    <circle class="icon-main" cx="-8" cy="-8" r="4"/>
+    <circle class="icon-main" cx="8" cy="-8" r="4"/>
+    <path class="icon-main" d="M -8,-3 L -8,3"/>
+    <path class="icon-main" d="M 8,-3 L 8,3"/>
+    <!-- Education/information symbols -->
+    <circle class="icon-secondary" cx="0" cy="8" r="7"/>
+    <text x="0" y="11" style="font-size: 10px; fill: white; font-weight: bold; text-anchor: middle;">i</text>
+    <!-- Book/training symbol -->
+    <rect class="icon-warning" x="-18" y="-2" width="8" height="6" rx="1"/>
+    <line x1="-14" y1="-2" x2="-14" y2="4" stroke="#f39c12" stroke-width="1"/>
+    <!-- Awareness/consultation bubble -->
+    <path class="icon-accent" d="M 12,0 L 18,0 L 18,5 L 15,5 L 13,7 L 13,5 L 12,5 Z" opacity="0.7"/>
+  </g>
+  
+  <text class="label-text label-bold" x="50" y="105">Services activités seniors</text>
+</svg>

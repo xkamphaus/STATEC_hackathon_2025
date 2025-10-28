@@ -1,5 +1,14 @@
 // Initialize the map centered on Luxembourg
-const map = L.map('map').setView([49.6, 6.1], 10);
+const luxembourgBounds = L.latLngBounds(
+    [49.4, 5.7],  // Southwest corner
+    [50.2, 6.6]   // Northeast corner
+);
+
+const map = L.map('map', {
+    minZoom: 8,
+    maxZoom: 12,
+    maxBounds: luxembourgBounds,
+}).setView([49.6, 6.1], 10);
 
 // Predefined markers for each option
 const markers = {
@@ -12,10 +21,6 @@ const markers = {
 		L.marker([49.633, 6.159]).bindPopup('Clinique Bohler (Hôpitaux Robert Schuman Group)'),
 		L.marker([49.60389, 6.1289]).bindPopup('ZithaKlinik (Hôpitaux Robert Schuman Group)')
 
-    ],
-    option3: [
-        L.marker([49.58, 6.12]).bindPopup('Marker 3-1'),
-        L.marker([49.57, 6.14]).bindPopup('Marker 3-2')
     ]
 };
 
@@ -42,13 +47,13 @@ async function fetchArray(filename) {
 		}
 
         // Extract headers
-        const headers = lines[0].split(',').map(header => removeQuotes(header.trim()));
+        const headers = lines[0].split(';').map(header => removeQuotes(header.trim()));
         
         // Create array of result objects
         const results = [];
         
         for (let i = 1; i < lines.length; i++) {
-            const values = lines[i].split(',').map(value => removeQuotes(value.trim()));
+            const values = lines[i].split(';').map(value => removeQuotes(value.trim()));
             const result = {};
             
             headers.forEach((header, index) => {
@@ -87,8 +92,50 @@ const pharmacyIcon = L.icon({
     popupAnchor: [1, -34],
     shadowSize: [50, 50]
 });
+const hebergementIcon = L.icon({
+    iconUrl: 'icons/icon_1_accommodation.svg',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [1, -34],
+    shadowSize: [50, 50]
+});
+const logementEncadreIcon = L.icon({
+    iconUrl: 'icons/icon_2_supervised.svg',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [1, -34],
+    shadowSize: [50, 50]
+});
+const centreJourIcon = L.icon({
+    iconUrl: 'icons/icon_3_daycentre.svg',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [1, -34],
+    shadowSize: [50, 50]
+});
+const aktivPlusIcon = L.icon({
+    iconUrl: 'icons/icon_4_aktivplus.svg',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [1, -34],
+    shadowSize: [50, 50]
+});
+const telealarmIcon = L.icon({
+    iconUrl: 'icons/icon_7_telealarm.svg',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [1, -34],
+    shadowSize: [50, 50]
+});
+const activitiesIcon = L.icon({
+    iconUrl: 'icons/icon_8_activities.svg',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [1, -34],
+    shadowSize: [50, 50]
+});
 
-fetchArray('assets/pharmacies_luxembourg_lu.csv').then(pharmacies => {
+fetchArray('assets/pharmacies_latlon.csv').then(pharmacies => {
     console.log('Pharmacies array:', pharmacies);
     console.log(`Total pharmacies: ${pharmacies.length}`);
 	pharm_markers = [];
@@ -96,17 +143,68 @@ fetchArray('assets/pharmacies_luxembourg_lu.csv').then(pharmacies => {
 		pharm_markers.push(L.marker([pharmacy['lat'], pharmacy['lon']]).bindPopup(pharmacy['name']).setIcon(pharmacyIcon));
 	});
 	markers['pharmacies'] = pharm_markers;
-	pharm_markers.forEach(marker => marker.addTo(map));
+	//pharm_markers.forEach(marker => marker.addTo(map)); //the pharmacy markers should not be selected by default
 });
+
+fetchArray('assets/hebergements_latlon.csv').then(hebergements => {
+    heb_markers = [];
+	hebergements.forEach(hebergement => {
+		heb_markers.push(L.marker([hebergement['lat'], hebergement['lon']]).bindPopup(hebergement['Nom']).setIcon(hebergementIcon));
+	});
+	markers['hebergements'] = heb_markers;
+});
+
+fetchArray('assets/centresJour_latlon.csv').then(centresJour => {
+    jour_markers = [];
+	centresJour.forEach(centreJour => {
+		jour_markers.push(L.marker([centreJour['lat'], centreJour['lon']]).bindPopup(centreJour['Nom']).setIcon(centreJourIcon));
+	});
+	markers['centresJour'] = jour_markers;
+});
+
+fetchArray('assets/aktivPlus_latlon.csv').then(aktivesPlus => {
+    aktivPlus_markers = [];
+	aktivesPlus.forEach(aktivPlus => {
+		aktivPlus_markers.push(L.marker([aktivPlus['lat'], aktivPlus['lon']]).bindPopup(aktivPlus['Nom']).setIcon(aktivPlusIcon));
+	});
+	markers['aktivesPlus'] = aktivPlus_markers;
+});
+
+fetchArray('assets/activities_latlon.csv').then(activities => {
+    act_markers = [];
+	activities.forEach(activity => {
+		act_markers.push(L.marker([activity['lat'], activity['lon']]).bindPopup(activity['Nom']).setIcon(activitiesIcon));
+	});
+	markers['activities'] = act_markers;
+});
+
+fetchArray('assets/alarmes_latlon.csv').then(alarmes => {
+    alarm_markers = [];
+	alarmes.forEach(alarm => {
+		alarm_markers.push(L.marker([alarm['lat'], alarm['lon']]).bindPopup(alarm['Nom']).setIcon(telealarmIcon));
+	});
+	markers['alarmes'] = alarm_markers;
+});
+
+fetchArray('assets/logementsEncadres_latlon.csv').then(logementsEncadres => {
+    log_markers = [];
+	logementsEncadres.forEach(logementEncadre => {
+		log_markers.push(L.marker([logementEncadre['lat'], logementEncadre['lon']]).bindPopup(logementEncadre['Nom']).setIcon(logementEncadreIcon));
+	});
+	markers['logementsEncadres'] = log_markers;
+});
+
 updateMarkerIcons(markers.hospitals, hospitalIcon);
 
  
-fetchArray('assets/population_per_commune.csv').then(pop_ratios => {popRatioData = pop_ratios});
+fetchArray('assets/population_statec.csv').then(pop_ratios => {popRatioData = pop_ratios});
 
 // Add OpenStreetMap tile layer
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19
+// Minimal positron style
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO',
+    maxZoom: 10,
+    minZoom: 8
 }).addTo(map);
 
 function getColorByValue(ratio) {
@@ -119,17 +217,17 @@ function getColorByValue(ratio) {
 function style(id_to_index, feature, min, max) {
 	fillColor = '#888888';
 	if (id_to_index && feature) {		
-		console.log(feature.properties['LAU2']);
+		//console.log(feature.properties['LAU2']);
 		id = parseInt(feature.properties['LAU2']);
 		index = id_to_index[id]
-		console.log(id, index)
+		//console.log(id, index)
 		if (!isNaN(index)) {
-			console.log(getColorByValue((index-min)*1.0/(max-min)), min, max);
+			//console.log(getColorByValue((index-min)*1.0/(max-min)), min, max);
 			fillColor = getColorByValue((index-min)*1.0/(max-min));
 		};
 	}; 
 	return {
-			color: '#3388ff',
+			color: '#ff7800', //'#3388ff'
 			weight: 2,
 			fillOpacity: 0.5,
 			fillColor: fillColor
@@ -141,7 +239,7 @@ function highlightFeature(e) {
     const layer = e.target;
     layer.setStyle({
         weight: 3,
-        color: '#ff7800',
+        color: '#3388ff', //'#ff7800'
         fillOpacity: 0.5
     });
     layer.bringToFront();
@@ -170,11 +268,66 @@ function onEachFeature(feature, layer) {
     }
 }
 
-
 // Add all markers to map initially
-Object.values(markers).flat().forEach(marker => marker.addTo(map));
+//Object.values(markers).flat().forEach(marker => marker.addTo(map));
 
 // Checkbox event listeners
+document.getElementById('mark_hebergement').addEventListener('change', function(e) {
+    markers.hebergements.forEach(marker => {
+        if (e.target.checked) {
+            marker.addTo(map);
+        } else {
+            map.removeLayer(marker);
+        }
+    });
+});
+
+document.getElementById('mark_logementEncadre').addEventListener('change', function(e) {
+    markers.logementsEncadres.forEach(marker => {
+        if (e.target.checked) {
+            marker.addTo(map);
+        } else {
+            map.removeLayer(marker);
+        }
+    });
+});
+document.getElementById('mark_centreJour').addEventListener('change', function(e) {
+    markers.centresJour.forEach(marker => {
+        if (e.target.checked) {
+            marker.addTo(map);
+        } else {
+            map.removeLayer(marker);
+        }
+    });
+});
+document.getElementById('mark_aktivPlus').addEventListener('change', function(e) {
+    markers.aktivesPlus.forEach(marker => {
+        if (e.target.checked) {
+            marker.addTo(map);
+        } else {
+            map.removeLayer(marker);
+        }
+    });
+});
+document.getElementById('mark_activities').addEventListener('change', function(e) {
+    markers.activities.forEach(marker => {
+        if (e.target.checked) {
+            marker.addTo(map);
+        } else {
+            map.removeLayer(marker);
+        }
+    });
+});
+document.getElementById('mark_alarme').addEventListener('change', function(e) {
+    markers.alarmes.forEach(marker => {
+        if (e.target.checked) {
+            marker.addTo(map);
+        } else {
+            map.removeLayer(marker);
+        }
+    });
+});
+
 document.getElementById('mark_hospitals').addEventListener('change', function(e) {
     markers.hospitals.forEach(marker => {
         if (e.target.checked) {
@@ -185,6 +338,8 @@ document.getElementById('mark_hospitals').addEventListener('change', function(e)
     });
 });
 
+//document.getElementById('radio_gender').checked = true;
+
 document.getElementById('mark_pharmacies').addEventListener('change', function(e) {
     markers.pharmacies.forEach(marker => {
         if (e.target.checked) {
@@ -194,17 +349,6 @@ document.getElementById('mark_pharmacies').addEventListener('change', function(e
         }
     });
 });
-
-document.getElementById('mark_activities').addEventListener('change', function(e) {
-    markers.option3.forEach(marker => {
-        if (e.target.checked) {
-            marker.addTo(map);
-        } else {
-            map.removeLayer(marker);
-        }
-    });
-});
-
 
 // Function to update the visualization with a different property
 function updateVisualization(propertyName, propertyValue) {
@@ -260,7 +404,6 @@ document.querySelectorAll('input[name="radio_gender"]').forEach(radio => {
   {updateVisualization('gender', e.target.value)});
 });
 
-
 // Load and display the GeoJSON file
 fetch('assets/LIMADM_COMMUNES.geojson')
     .then(response => {
@@ -278,8 +421,15 @@ fetch('assets/LIMADM_COMMUNES.geojson')
         }).addTo(map);
         
         // Fit map bounds to show all features
-        map.fitBounds(geojsonLayer.getBounds());
-        
+        //map.fitBounds(geojsonLayer.getBounds());
+
+        const bounds = geojsonLayer.getBounds();
+        map.setMaxBounds(bounds.pad(0.1)); // pad adds 10% buffer
+        map.fitBounds(bounds);
+        map.minZoom = 8;
+        map.maxZoom = 10;
+
+        updateVisualization('gender', 'Total')
         console.log('GeoJSON loaded successfully');
     })
     .catch(error => {

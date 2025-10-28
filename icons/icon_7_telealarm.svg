@@ -1,0 +1,29 @@
+<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .icon-bg { fill: #f0f4f8; }
+      .icon-main { fill: #4a90e2; }
+      .icon-accent { fill: #e94b3c; }
+      .icon-secondary { fill: #5ab98d; }
+      .label-text { font-family: Arial, sans-serif; font-size: 10px; fill: #333; text-anchor: middle; }
+      .label-bold { font-weight: bold; }
+    </style>
+  </defs>
+  
+  <g transform="translate(50, 50)">
+    <circle class="icon-bg" cx="0" cy="0" r="38"/>
+    <!-- Small house in background -->
+    <path class="icon-secondary" d="M -15,-5 L -15,8 L -5,8 L -5,-5 Z M -20,0 L -10,-8 L 0,0" opacity="0.5"/>
+    <!-- Phone/device -->
+    <rect class="icon-main" x="-8" y="-12" width="16" height="24" rx="2"/>
+    <rect class="icon-bg" x="-5" y="-9" width="10" height="14" rx="1"/>
+    <circle class="icon-bg" cx="0" cy="8" r="2"/>
+    <!-- Emergency signal waves -->
+    <path class="icon-accent" d="M 10,-8 L 16,-14 M 13,-6 L 17,-10 M 12,-2 L 15,-5" stroke="#e94b3c" stroke-width="2" fill="none"/>
+    <circle class="icon-accent" cx="14" cy="-11" r="1.5"/>
+    <!-- 24/7 indicator -->
+    <text x="0" y="-17" style="font-size: 6px; fill: #333; font-weight: bold; text-anchor: middle;">24/7</text>
+  </g>
+  
+  <text class="label-text label-bold" x="50" y="105">Services téléalarme</text>
+</svg>

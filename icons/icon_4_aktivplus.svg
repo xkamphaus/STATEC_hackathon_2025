@@ -1,0 +1,28 @@
+<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .icon-bg { fill: #f0f4f8; }
+      .icon-main { fill: #4a90e2; }
+      .icon-accent { fill: #e94b3c; }
+      .icon-secondary { fill: #5ab98d; }
+      .icon-warning { fill: #f39c12; }
+      .label-text { font-family: Arial, sans-serif; font-size: 10px; fill: #333; text-anchor: middle; }
+      .label-bold { font-weight: bold; }
+    </style>
+  </defs>
+  
+  <g transform="translate(50, 50)">
+    <circle class="icon-bg" cx="0" cy="0" r="38"/>
+    <!-- Two active figures -->
+    <circle class="icon-main" cx="-10" cy="-12" r="4"/>
+    <path class="icon-main" d="M -10,-7 L -10,3 M -15,-2 L -5,-2 M -10,3 L -15,10 M -10,3 L -5,10"/>
+    <circle class="icon-main" cx="10" cy="-12" r="4"/>
+    <path class="icon-main" d="M 10,-7 L 10,3 M 5,-2 L 15,-2 M 10,3 L 5,10 M 10,3 L 15,10"/>
+    <!-- Activity symbols (sports, culture, leisure) -->
+    <circle class="icon-secondary" cx="-18" cy="5" r="2.5"/>
+    <rect class="icon-accent" x="14" y="3" width="5" height="5" rx="1"/>
+    <path class="icon-warning" d="M -2,12 L 0,8 L 2,12 L 0,10 Z"/>
+  </g>
+  
+  <text class="label-text label-bold" x="50" y="105">Clubs Aktiv Plus</text>
+</svg>

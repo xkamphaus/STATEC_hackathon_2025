@@ -15,28 +15,56 @@
     <div id="map"></div>
     
 	<div id="sidebar">
-    <h3>Locations</h3>
+    
+    <h3>Housing</h3>
     <label>
-        <input type="checkbox" id="mark_hospitals" checked>
+      <input type="checkbox" id="mark_hebergement" unchecked>
+      Structures d'hébergement
+    </label>
+    <label>
+      <input type="checkbox" id="mark_logementEncadre" unchecked>
+      Logements encadrés
+    </label>
+
+    <h3>Leisure</h3>
+    <label>
+      <input type="checkbox" id="mark_centreJour" unchecked>
+      Centres de jour
+    </label>
+    <label>
+      <input type="checkbox" id="mark_aktivPlus" unchecked>
+      Clubs Aktiv Plus
+    </label>
+    <label>
+      <input type="checkbox" id="mark_activities" unchecked>
+      Services activités seniors
+    </label>
+    
+    <h3>Health care</h3>
+    <label>
+        <input type="checkbox" id="mark_hospitals" unchecked>
         Hospitals
     </label>
     <label>
-        <input type="checkbox" id="mark_pharmacies" checked>
+        <input type="checkbox" id="mark_pharmacies" unchecked>
         Pharmacies
     </label>
+
+    <h3>Security</h3>
     <label>
-        <input type="checkbox" id="mark_activities" checked>
-        Option 3
+      <input type="checkbox" id="mark_alarme" unchecked>
+      Services téléalarme
     </label>
-	<h3>Population</h3>
+
+    <h3>Population</h3>
 	  <label>
-		<input type="radio" name="radio_gender" value="male"> Male
+		<input type="radio" name="radio_gender" value="male"> Male (% age 60 or over)
 	  </label>
 	  <label>
-		<input type="radio" name="radio_gender" value="female"> Female
+		<input type="radio" name="radio_gender" value="female"> Female (% age 60 or over)
 	  </label>
 	  <label>
-		<input type="radio" name="radio_gender" value="total"> Total
+		<input type="radio" name="radio_gender" value="total"> Total (% total population)
 	  </label>
 	</div>
 	

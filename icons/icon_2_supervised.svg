@@ -1,0 +1,31 @@
+<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .icon-bg { fill: #f0f4f8; }
+      .icon-main { fill: #4a90e2; }
+      .icon-secondary { fill: #5ab98d; }
+      .icon-warning { fill: #f39c12; }
+      .label-text { font-family: Arial, sans-serif; font-size: 10px; fill: #333; text-anchor: middle; }
+      .label-bold { font-weight: bold; }
+    </style>
+  </defs>
+  
+  <g transform="translate(50, 50)">
+    <circle class="icon-bg" cx="0" cy="0" r="38"/>
+    <rect class="icon-main" x="-20" y="-15" width="40" height="30" rx="2"/>
+    <!-- Door showing independence -->
+    <rect class="icon-secondary" x="-5" y="5" width="10" height="10"/>
+    <circle class="icon-secondary" cx="2" cy="10" r="1"/>
+    <!-- Clock showing limited hours -->
+    <circle class="icon-warning" cx="12" cy="-10" r="6"/>
+    <line x1="12" y1="-10" x2="12" y2="-13" stroke="white" stroke-width="1.5"/>
+    <line x1="12" y1="-10" x2="14" y2="-10" stroke="white" stroke-width="1.5"/>
+    <!-- Windows -->
+    <rect class="icon-bg" x="-15" y="-10" width="8" height="6"/>
+    <rect class="icon-bg" x="-15" y="0" width="8" height="6"/>
+    <!-- 5d/8h indicator -->
+    <text x="12" y="-18" style="font-size: 6px; fill: #333; font-weight: bold; text-anchor: middle;">5d/8h</text>
+  </g>
+  
+  <text class="label-text label-bold" x="50" y="105">Logements encadrés</text>
+</svg>

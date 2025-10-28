@@ -1,0 +1,31 @@
+<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .icon-bg { fill: #f0f4f8; }
+      .icon-main { fill: #4a90e2; }
+      .icon-accent { fill: #e94b3c; }
+      .icon-warning { fill: #f39c12; }
+      .label-text { font-family: Arial, sans-serif; font-size: 10px; fill: #333; text-anchor: middle; }
+      .label-bold { font-weight: bold; }
+    </style>
+  </defs>
+  
+  <g transform="translate(50, 50)">
+    <circle class="icon-bg" cx="0" cy="0" r="38"/>
+    <rect class="icon-main" x="-22" y="-12" width="44" height="28" rx="2"/>
+    <!-- Windows showing 24/7 presence -->
+    <rect class="icon-warning" x="-17" y="-7" width="10" height="8"/>
+    <rect class="icon-warning" x="-4" y="-7" width="10" height="8"/>
+    <rect class="icon-warning" x="9" y="-7" width="10" height="8"/>
+    <rect class="icon-warning" x="-17" y="3" width="10" height="8"/>
+    <rect class="icon-warning" x="-4" y="3" width="10" height="8"/>
+    <rect class="icon-warning" x="9" y="3" width="10" height="8"/>
+    <!-- 24/7 badge -->
+    <circle class="icon-accent" cx="15" cy="-15" r="7"/>
+    <text x="15" y="-12" style="font-size: 6px; fill: white; font-weight: bold; text-anchor: middle;">24/7</text>
+    <!-- Bed symbol inside -->
+    <path class="icon-bg" d="M -8,-3 L -8,2 L 8,2 L 8,-3 M -6,-3 Q 0,-6 6,-3" stroke-width="1.5"/>
+  </g>
+  
+  <text class="label-text label-bold" x="50" y="105">Structures d'hébergement</text>
+</svg>

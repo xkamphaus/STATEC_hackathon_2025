@@ -1,0 +1,30 @@
+<svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .icon-bg { fill: #f0f4f8; }
+      .icon-main { fill: #4a90e2; }
+      .icon-secondary { fill: #5ab98d; }
+      .icon-warning { fill: #f39c12; }
+      .label-text { font-family: Arial, sans-serif; font-size: 10px; fill: #333; text-anchor: middle; }
+      .label-bold { font-weight: bold; }
+    </style>
+  </defs>
+  
+  <g transform="translate(50, 50)">
+    <circle class="icon-bg" cx="0" cy="0" r="38"/>
+    <!-- Sun for daytime -->
+    <circle class="icon-warning" cx="-15" cy="-15" r="5"/>
+    <line class="icon-warning" x1="-15" y1="-23" x2="-15" y2="-21" stroke="#f39c12" stroke-width="1.5"/>
+    <line class="icon-warning" x1="-21" y1="-19" x2="-19" y2="-17" stroke="#f39c12" stroke-width="1.5"/>
+    <line class="icon-warning" x1="-23" y1="-15" x2="-21" y2="-15" stroke="#f39c12" stroke-width="1.5"/>
+    <line class="icon-warning" x1="-9" y1="-15" x2="-11" y2="-15" stroke="#f39c12" stroke-width="1.5"/>
+    <!-- Day centre building -->
+    <rect class="icon-main" x="-12" y="-5" width="24" height="18" rx="2"/>
+    <rect class="icon-bg" x="-7" y="0" width="6" height="8"/>
+    <rect class="icon-bg" x="1" y="0" width="6" height="8"/>
+    <!-- Arrow returning home -->
+    <path class="icon-secondary" d="M 10,-8 L 18,-8 L 18,-12 L 24,-6 L 18,0 L 18,-4 L 10,-4" stroke="#5ab98d" stroke-width="1.5" fill="none"/>
+  </g>
+  
+  <text class="label-text label-bold" x="50" y="105">Centres de jour</text>
+</svg>
