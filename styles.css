@@ -31,23 +31,26 @@ body {
     height: calc(100vh - 120px); /* Adjust height to account for title */
 }
 
-/* Customize popup styles */
-.leaflet-popup-content-wrapper {
-    border-radius: 8px;
-}
-
-.leaflet-popup-content h3 {
-    margin: 0 0 10px 0;
-    color: #2c3e50;
-}
-
-.leaflet-popup-content p {
-    margin: 5px 0;
-    color: #555;
+.custom-popup {
+    /* Remove fixed positioning since we're handling it via JavaScript */
+    margin: 0 !important;
 }
 
 .custom-popup .leaflet-popup-tip {
     display: none !important;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    clip-path: none !important;
+}
+
+.custom-popup-content {
+    max-height: 200px;
+    overflow-y: auto;
+    max-width: 300px;
 }
 
 #sidebar {

@@ -254,14 +254,13 @@ function resetHighlight(e) {
 }
 
 function onEachFeature(feature, layer) {
-    // Create a custom popup container in the upper left
+    // Create a custom popup container
     const customPopup = L.popup({
         closeButton: false,
         autoClose: false,
         closeOnEscapeKey: false,
         closeOnClick: false,
-        className: 'custom-popup',
-        offset: [10, 10] // Position offset for upper left
+        className: 'custom-popup'
     });
     
     // Build popup content from feature properties
@@ -282,18 +281,30 @@ function onEachFeature(feature, layer) {
         mouseover: function(e) {
             highlightFeature(e); // Your existing highlight function
             
-            // Show custom popup in upper left
+            // Show custom popup in upper left of map container
             if (!this.customPopup.isOpen()) {
                 this.customPopup.setLatLng(e.latlng);
                 this.customPopup.openOn(map);
                 
-                // Position in upper left corner
+                // Position in upper left corner of map container
                 const popupElement = this.customPopup.getElement();
                 if (popupElement) {
-                    popupElement.style.position = 'fixed';
+                    const mapContainer = map.getContainer();
+                    const mapRect = mapContainer.getBoundingClientRect();
+                    
+                    popupElement.style.position = 'absolute';
                     popupElement.style.top = '10px';
-                    popupElement.style.left = '40px';
-                    popupElement.style.transform = 'none'; // Remove leaflet's positioning
+                    popupElement.style.left = '10px';
+                    popupElement.style.transform = 'none';
+                    popupElement.style.margin = '0';
+                    
+                    // Ensure popup stays within map bounds
+                    const popupRect = popupElement.getBoundingClientRect();
+                    const maxLeft = mapRect.width - popupRect.width - 10;
+                    const maxTop = mapRect.height - popupRect.height - 10;
+                    
+                    popupElement.style.left = Math.min(10, maxLeft) + 'px';
+                    popupElement.style.top = Math.min(10, maxTop) + 'px';
                 }
             }
         },
@@ -306,13 +317,13 @@ function onEachFeature(feature, layer) {
             }
         }
     });
-	
-	// Close popup on zoom
-	map.on('zoomstart', function() {
-    if (layer.customPopup && layer.customPopup.isOpen()) {
-        layer.customPopup.remove();
-    }
-});
+    
+    // Close popup on zoom
+    map.on('zoomstart', function() {
+        if (layer.customPopup && layer.customPopup.isOpen()) {
+            layer.customPopup.remove();
+        }
+    });
 }
 
 // Checkbox event listeners
@@ -325,6 +336,14 @@ document.getElementById('mark_hebergement').addEventListener('change', function(
         }
     });
 });
+
+['mark_logementEncadre', 'mark_centreJour', 'mark_aktivPlus', 'mark_activities', 'mark_alarme', 'mark_hospitals', 'mark_pharmacies'].forEach(id => {
+	document.getElementById(id).checked = false;
+});
+
+document.getElementById('radio_gender_total').checked = true;
+
+
 
 document.getElementById('mark_logementEncadre').addEventListener('change', function(e) {
     markers.logementsEncadres.forEach(marker => {
@@ -505,3 +524,4 @@ fetch('assets/LIMADM_COMMUNES.geojson')
         console.error('Error loading GeoJSON:', error);
         alert('Error loading communes data. Please check that assets/communes.json exists.');
     });
+	
