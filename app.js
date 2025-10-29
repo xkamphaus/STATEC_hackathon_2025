@@ -18,6 +18,7 @@ let selection = {'gender': 'Total', 'age': '60 years or over'};
 let geojsonLayer;
 let geojsonData;
 let popRatioData;
+let minMaxLegend = [];
 
 async function fetchArray(filename) {
     try {
@@ -385,6 +386,7 @@ function updateVisualization(propertyName, propertyValue) {
 	});
    
     console.log(min, max, id_to_index);
+	minMaxLegend = [min, max];
     // Add new layer with updated colors
     geojsonLayer = L.geoJSON(geojsonData, {
         style: (feature) => style(id_to_index, feature, min, max),
@@ -434,6 +436,30 @@ fetch('assets/LIMADM_COMMUNES.geojson')
 
         updateVisualization('gender', 'Total')
         console.log('GeoJSON loaded successfully');
+		
+		// Create a legend control
+		var legend = L.control({position: 'bottomleft'});
+
+		legend.onAdd = function(map) {
+			var div = L.DomUtil.create('div', 'legend color-bar-legend');
+			
+			// Create color gradient from white to #dfc000
+			div.innerHTML = `
+				<h4>Intensity Scale</h4>
+				<div class="color-bar">
+					<div class="color-gradient"></div>
+					<div class="color-labels">
+						<span>0%</span>
+						<span>100%</span>
+					</div>
+				</div>
+			`;
+			
+			return div;
+		};
+
+		// Add legend to map
+		legend.addTo(map);
     })
     .catch(error => {
         console.error('Error loading GeoJSON:', error);

@@ -56,3 +56,41 @@ body {
     margin-right: 8px;
     cursor: pointer;
 }
+
+
+.legend {
+    line-height: 18px;
+    color: #333;
+    background: white;
+    background: rgba(255,255,255,0.9);
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    font-family: Arial, sans-serif;
+}
+
+.legend h4 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.color-bar {
+    width: 200px;
+}
+
+.color-gradient {
+	height: 20px;
+	background: linear-gradient(to right, rgb(255, 255, 255), rgb(223, 192, 0));
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 5px;
+}
+
+.color-labels {
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+	color: #666;
+}
