@@ -17,14 +17,8 @@
 
 - go to a webbrowser and go to the url: http://127.0.0.1:8000/
 
-### ToDos
+### Documentation
 
-- add something else to the index other than age / gender ratio (like distance to hospitals, forestation, ...)
+- Project description: docs/project_info.md
 
-- add age group selection (not priority)
-
-- add popup info
-
-- update legend
-
-- add info to the two missing communes (LAU 711 and 1209)
+- Data source description: docs/data_source_info.md

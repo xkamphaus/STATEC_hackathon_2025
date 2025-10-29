@@ -14,11 +14,11 @@ An interactive map allowing you to seeing aging and access at a glance in Luxemb
 ### 👥 Team Members
 | Name | Affiliation | 
 |------|------|
-| Daniel | MENEJ-SCRIPT |
-| Nevena | MENEJ-SCRIPT | 
-| Nour | MENEJ | 
-| Xavier | MENEJ-SCRIPT | 
-| Zeno | MENEJ-SCRIPT | 
+| Daniel MICHULKE | MENEJ-SCRIPT |
+| Nevena ZHELYAZKOVA | MENEJ-SCRIPT | 
+| Nour BOUZAHZAH | MENEJ | 
+| Xavier KAMPHAUS | MENEJ-SCRIPT | 
+| Zeno PERACCHIONE | MENEJ-SCRIPT | 
 
 ---
 
