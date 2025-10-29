@@ -58,7 +58,7 @@ This tool integrates key public datasets to support smarter, more equitable plan
 
     - Data processing: Python / R​
 
-    - Front-end: HTML/CSS/JavaScript (if interactive web app)​
+    - Front-end: HTML/CSS/JavaScript
 
 - Innovation:​
 
