@@ -1,6 +1,6 @@
-### README
+## README
 
-requirements to visualize the dashboard:
+### requirements to visualize the dashboard:
 
 - clone the repository and save it in a directoy (e.g. 'your_repo_dir_path')
     - you can download it manually:

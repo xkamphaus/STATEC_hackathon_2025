@@ -1,4 +1,4 @@
-### STATEC_hackathon_2025
+## STATEC_hackathon_2025
 
 #### 🧭 Overview
 Briefly describe your project in 2–3 sentences.  
