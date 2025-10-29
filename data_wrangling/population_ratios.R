@@ -1,12 +1,18 @@
 library(tidyverse)
 
+# global variables
+
 age_group_60 <- c("Y60T64", "Y65T69", "Y70T74", "Y75T79",
                   "Y80T84", "Y85T89", "Y90T94", "Y95T99", "Y_GE100")
 age_group_70 <- c("Y70T74", "Y75T79", "Y80T84", "Y85T89", "Y90T94", "Y95T99", "Y_GE100")
 age_group_80 <- c("Y80T84", "Y85T89", "Y90T94", "Y95T99", "Y_GE100")
 age_group_90 <- c("Y90T94", "Y95T99", "Y_GE100")
+file_input <- "../assets/LU1,DSD_CENSUS_GROUP1_3@DF_B1607,1.0+all.csv"
+file_output <- "../assets/population_statec.csv"
 
-df_data <- read.csv("C:/Users/kamxa019/Downloads/LU1,DSD_CENSUS_GROUP1_3@DF_B1607,1.0+all.csv")
+# data import
+
+df_data <- read.csv(file_input)
 
 df_data_w_geo <-
   df_data |>
@@ -68,4 +74,4 @@ df_ratios <-
                         round(100.0 * OBS_VALUE/POP_AGE_OBS_VALUE, 1))) |>
   rename_with(tolower)
 
-write.csv(df_ratios, "C:/Users/kamxa019/Downloads/population_per_commune.csv", row.names = F)
+write.csv(df_ratios, file_output, row.names = F, sep=";")

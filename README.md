@@ -1,6 +1,18 @@
 # STATEC_hackathon_2025
 
-run with python -m http.server 8000
+requirements to visualize the dashboard:
+
+- clone the repository on github, e.g.: 
+    - download manually: 
+    - or, with git:
+        git init
+        git clone https://github.com/xkamphaus/STATEC_hackathon_2025.git
+
+- install python
+
+- run in command line: python -m http.server 8000
+
+- go to webbrower and open url: http://127.0.0.1:8000/
 
 ### ToDos
 
