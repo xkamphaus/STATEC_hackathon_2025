@@ -125,12 +125,38 @@ const activitiesIcon = L.icon({
     shadowSize: [50, 50]
 });
 
+function createPopup(dict) {
+  let popupContent = '<div class="custom-popup-content">';
+  function initCap(val) {
+    return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+  };
+    if (dict) {
+		const showFirst = ['Nom', 'nom', 'Name', 'name'];
+		const showNever = ['Section', 'Numero'];
+		showFirst.forEach(key => {
+			value = dict[key];
+			if (value && value.length > 0)
+			{
+				popupContent += `<p><strong>${initCap(key)}:</strong> ${value}</p>`;
+			};
+		});
+        for (const [key, value] of Object.entries(dict)) {
+			if (!value || value.length == 0 ||  ['lat', 'lon'].includes(key) || showFirst.includes(key) || showNever.includes(key)) {} else 
+			{
+				popupContent += `<p><strong>${initCap(key)}:</strong> ${value}</p>`;
+			};
+        }
+    }
+    popupContent += '</div>';
+	return popupContent;
+}
+
 fetchArray('assets/pharmacies_latlon.csv').then(pharmacies => {
     console.log('Pharmacies array:', pharmacies);
     console.log(`Total pharmacies: ${pharmacies.length}`);
 	pharm_markers = [];
 	pharmacies.forEach(pharmacy => {
-		pharm_markers.push(L.marker([pharmacy['lat'], pharmacy['lon']]).bindPopup(pharmacy['name']).setIcon(pharmacyIcon));
+		pharm_markers.push(L.marker([pharmacy['lat'], pharmacy['lon']]).bindPopup(createPopup(pharmacy)).setIcon(pharmacyIcon));
 	});
 	markers['pharmacies'] = pharm_markers;
 	//pharm_markers.forEach(marker => marker.addTo(map)); //the pharmacy markers should not be selected by default
@@ -139,7 +165,7 @@ fetchArray('assets/pharmacies_latlon.csv').then(pharmacies => {
 fetchArray('assets/hospitals_latlon.csv').then(hospitals => {
     hospital_markers = [];
 	hospitals.forEach(hospital => {
-		hospital_markers.push(L.marker([hospital['lat'], hospital['lon']]).bindPopup(hospital['name']).setIcon(hospitalIcon));
+		hospital_markers.push(L.marker([hospital['lat'], hospital['lon']]).bindPopup(createPopup(hospital)).setIcon(hospitalIcon));
 	});
 	markers['hospitals'] = hospital_markers;
 });
@@ -147,7 +173,7 @@ fetchArray('assets/hospitals_latlon.csv').then(hospitals => {
 fetchArray('assets/hebergements_latlon.csv').then(hebergements => {
     heb_markers = [];
 	hebergements.forEach(hebergement => {
-		heb_markers.push(L.marker([hebergement['lat'], hebergement['lon']]).bindPopup(hebergement['name']).setIcon(hebergementIcon));
+		heb_markers.push(L.marker([hebergement['lat'], hebergement['lon']]).bindPopup(createPopup(hebergement)).setIcon(hebergementIcon));
 	});
 	markers['hebergements'] = heb_markers;
 });
@@ -155,7 +181,7 @@ fetchArray('assets/hebergements_latlon.csv').then(hebergements => {
 fetchArray('assets/centresJour_latlon.csv').then(centresJour => {
     jour_markers = [];
 	centresJour.forEach(centreJour => {
-		jour_markers.push(L.marker([centreJour['lat'], centreJour['lon']]).bindPopup(centreJour['Nom']).setIcon(centreJourIcon));
+		jour_markers.push(L.marker([centreJour['lat'], centreJour['lon']]).bindPopup(createPopup(centreJour)).setIcon(centreJourIcon));
 	});
 	markers['centresJour'] = jour_markers;
 });
@@ -163,7 +189,7 @@ fetchArray('assets/centresJour_latlon.csv').then(centresJour => {
 fetchArray('assets/aktivPlus_latlon.csv').then(aktivesPlus => {
     aktivPlus_markers = [];
 	aktivesPlus.forEach(aktivPlus => {
-		aktivPlus_markers.push(L.marker([aktivPlus['lat'], aktivPlus['lon']]).bindPopup(aktivPlus['Nom']).setIcon(aktivPlusIcon));
+		aktivPlus_markers.push(L.marker([aktivPlus['lat'], aktivPlus['lon']]).bindPopup(createPopup(aktivPlus)).setIcon(aktivPlusIcon));
 	});
 	markers['aktivesPlus'] = aktivPlus_markers;
 });
@@ -171,7 +197,7 @@ fetchArray('assets/aktivPlus_latlon.csv').then(aktivesPlus => {
 fetchArray('assets/activities_latlon.csv').then(activities => {
     act_markers = [];
 	activities.forEach(activity => {
-		act_markers.push(L.marker([activity['lat'], activity['lon']]).bindPopup(activity['Nom']).setIcon(activitiesIcon));
+		act_markers.push(L.marker([activity['lat'], activity['lon']]).bindPopup(createPopup(activity)).setIcon(activitiesIcon));
 	});
 	markers['activities'] = act_markers;
 });
@@ -179,7 +205,7 @@ fetchArray('assets/activities_latlon.csv').then(activities => {
 fetchArray('assets/alarmes_latlon.csv').then(alarmes => {
     alarm_markers = [];
 	alarmes.forEach(alarm => {
-		alarm_markers.push(L.marker([alarm['lat'], alarm['lon']]).bindPopup(alarm['Nom']).setIcon(telealarmIcon));
+		alarm_markers.push(L.marker([alarm['lat'], alarm['lon']]).bindPopup(createPopup(alarm)).setIcon(telealarmIcon));
 	});
 	markers['alarmes'] = alarm_markers;
 });
@@ -187,7 +213,7 @@ fetchArray('assets/alarmes_latlon.csv').then(alarmes => {
 fetchArray('assets/logementsEncadres_latlon.csv').then(logementsEncadres => {
     log_markers = [];
 	logementsEncadres.forEach(logementEncadre => {
-		log_markers.push(L.marker([logementEncadre['lat'], logementEncadre['lon']]).bindPopup(logementEncadre['Nom']).setIcon(logementEncadreIcon));
+		log_markers.push(L.marker([logementEncadre['lat'], logementEncadre['lon']]).bindPopup(createPopup(logementEncadre)).setIcon(logementEncadreIcon));
 	});
 	markers['logementsEncadres'] = log_markers;
 });
@@ -337,7 +363,7 @@ document.getElementById('mark_hebergement').addEventListener('change', function(
     });
 });
 
-['mark_logementEncadre', 'mark_centreJour', 'mark_aktivPlus', 'mark_activities', 'mark_alarme', 'mark_hospitals', 'mark_pharmacies'].forEach(id => {
+['mark_hebergement', 'mark_logementEncadre', 'mark_centreJour', 'mark_aktivPlus', 'mark_activities', 'mark_alarme', 'mark_hospitals', 'mark_pharmacies'].forEach(id => {
 	document.getElementById(id).checked = false;
 });
 
