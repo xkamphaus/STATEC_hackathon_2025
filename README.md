@@ -1,4 +1,4 @@
-### STATEC_hackathon_2025
+### README
 
 requirements to visualize the dashboard:
 
