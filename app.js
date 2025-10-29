@@ -253,23 +253,61 @@ function resetHighlight(e) {
     geojsonLayer.resetStyle(e.target);
 }
 
-// Click handler - display properties in popup
 function onEachFeature(feature, layer) {
-    // Add hover effects
-    layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight
+    // Create a custom popup container in the upper left
+    const customPopup = L.popup({
+        closeButton: false,
+        autoClose: false,
+        closeOnEscapeKey: false,
+        closeOnClick: false,
+        className: 'custom-popup',
+        offset: [10, 10] // Position offset for upper left
     });
     
-    // Add click popup with feature properties
+    // Build popup content from feature properties
+    let popupContent = '<div class="custom-popup-content">';
     if (feature.properties) {
-        let popupContent = '<div>';
         for (const [key, value] of Object.entries(feature.properties)) {
             popupContent += `<p><strong>${key}:</strong> ${value}</p>`;
         }
-        popupContent += '</div>';
-        layer.bindPopup(popupContent);
     }
+    popupContent += '</div>';
+    customPopup.setContent(popupContent);
+    
+    // Store reference to the custom popup
+    layer.customPopup = customPopup;
+    
+    // Add hover effects - highlight remains untouched
+    layer.on({
+        mouseover: function(e) {
+            highlightFeature(e); // Your existing highlight function
+            
+            // Show custom popup in upper left
+            if (!this.customPopup.isOpen()) {
+                this.customPopup.setLatLng(e.latlng);
+                this.customPopup.openOn(map);
+                
+                // Position in upper left corner
+                const popupElement = this.customPopup.getElement();
+                if (popupElement) {
+                    popupElement.style.position = 'fixed';
+                    popupElement.style.top = '10px';
+                    popupElement.style.left = '10px';
+                    popupElement.style.transform = 'none'; // Remove leaflet's positioning
+                }
+            }
+        },
+        mouseout: function(e) {
+            resetHighlight(e); // Your existing reset function
+            
+            // Close the custom popup
+            if (this.customPopup.isOpen()) {
+                this.customPopup.remove();
+            }
+        }
+    });
+    
+    // Click popup functionality has been removed
 }
 
 // Add all markers to map initially
