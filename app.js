@@ -517,7 +517,7 @@ fetch('assets/LIMADM_COMMUNES.geojson')
         map.setMaxBounds(bounds.pad(0.1)); // pad adds 10% buffer
         map.fitBounds(bounds);
         map.minZoom = 8;
-        map.maxZoom = 10;
+        map.maxZoom = 9;
 
         updateVisualization('gender', 'Total')
         console.log('GeoJSON loaded successfully');
