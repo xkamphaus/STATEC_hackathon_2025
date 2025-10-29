@@ -1,18 +1,20 @@
-# STATEC_hackathon_2025
+### STATEC_hackathon_2025
 
 requirements to visualize the dashboard:
 
-- clone the repository on github, e.g.: 
-    - download manually: 
-    - or, with git:
-        git init
-        git clone https://github.com/xkamphaus/STATEC_hackathon_2025.git
+- clone the repository and save it in a directoy (e.g. 'your_repo_dir_path')
+    - you can download it manually:
+    - or, with git, run in command line:
+        - git init
+        - git clone https://github.com/xkamphaus/STATEC_hackathon_2025.git
 
 - install python
 
-- run in command line: python -m http.server 8000
+- run in command line:
+    - cd 'your_repo_dir_path' (set the directory where the repository is cloned)
+    - python_dir_path/python.exe -m http.server 8000 (this opens the instance to host the website locally)
 
-- go to webbrower and open url: http://127.0.0.1:8000/
+- go to a webbrowser and go to the url: http://127.0.0.1:8000/
 
 ### ToDos
 
