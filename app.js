@@ -132,7 +132,7 @@ function createPopup(dict) {
   };
     if (dict) {
 		const showFirst = ['Nom', 'nom', 'Name', 'name'];
-		const showNever = ['Section', 'Numero', 'Ville', 'Page', 'Year'];
+		const showNever = ['Section', 'Numero', 'Ville', 'Page', 'year', 'LAU2'];
 		showFirst.forEach(key => {
 			value = dict[key];
 			if (value && value.length > 0)
@@ -156,7 +156,10 @@ fetchArray('assets/pharmacies_latlon.csv').then(pharmacies => {
     console.log(`Total pharmacies: ${pharmacies.length}`);
 	pharm_markers = [];
 	pharmacies.forEach(pharmacy => {
-		pharm_markers.push(L.marker([pharmacy['lat'], pharmacy['lon']]).bindPopup(createPopup(pharmacy)).setIcon(pharmacyIcon));
+		pharm_markers.push(L.marker([pharmacy['lat'], pharmacy['lon']]).bindPopup(createPopup(pharmacy), {
+            autoClose: false,    
+            closeOnClick: true
+        }).setIcon(pharmacyIcon));
 	});
 	markers['pharmacies'] = pharm_markers;
 	//pharm_markers.forEach(marker => marker.addTo(map)); //the pharmacy markers should not be selected by default
@@ -165,7 +168,10 @@ fetchArray('assets/pharmacies_latlon.csv').then(pharmacies => {
 fetchArray('assets/hospitals_latlon.csv').then(hospitals => {
     hospital_markers = [];
 	hospitals.forEach(hospital => {
-		hospital_markers.push(L.marker([hospital['lat'], hospital['lon']]).bindPopup(createPopup(hospital)).setIcon(hospitalIcon));
+		hospital_markers.push(L.marker([hospital['lat'], hospital['lon']]).bindPopup(createPopup(hospital), {
+            autoClose: false,    
+            closeOnClick: true  
+        }).setIcon(hospitalIcon));
 	});
 	markers['hospitals'] = hospital_markers;
 });
@@ -173,7 +179,10 @@ fetchArray('assets/hospitals_latlon.csv').then(hospitals => {
 fetchArray('assets/hebergements_latlon.csv').then(hebergements => {
     heb_markers = [];
 	hebergements.forEach(hebergement => {
-		heb_markers.push(L.marker([hebergement['lat'], hebergement['lon']]).bindPopup(createPopup(hebergement)).setIcon(hebergementIcon));
+		heb_markers.push(L.marker([hebergement['lat'], hebergement['lon']]).bindPopup(createPopup(hebergement), {
+            autoClose: false,   
+            closeOnClick: true  
+        }).setIcon(hebergementIcon));
 	});
 	markers['hebergements'] = heb_markers;
 });
@@ -181,7 +190,10 @@ fetchArray('assets/hebergements_latlon.csv').then(hebergements => {
 fetchArray('assets/centresJour_latlon.csv').then(centresJour => {
     jour_markers = [];
 	centresJour.forEach(centreJour => {
-		jour_markers.push(L.marker([centreJour['lat'], centreJour['lon']]).bindPopup(createPopup(centreJour)).setIcon(centreJourIcon));
+		jour_markers.push(L.marker([centreJour['lat'], centreJour['lon']]).bindPopup(createPopup(centreJour), {
+            autoClose: false,     
+            closeOnClick: true 
+        }).setIcon(centreJourIcon));
 	});
 	markers['centresJour'] = jour_markers;
 });
@@ -189,7 +201,10 @@ fetchArray('assets/centresJour_latlon.csv').then(centresJour => {
 fetchArray('assets/aktivPlus_latlon.csv').then(aktivesPlus => {
     aktivPlus_markers = [];
 	aktivesPlus.forEach(aktivPlus => {
-		aktivPlus_markers.push(L.marker([aktivPlus['lat'], aktivPlus['lon']]).bindPopup(createPopup(aktivPlus)).setIcon(aktivPlusIcon));
+		aktivPlus_markers.push(L.marker([aktivPlus['lat'], aktivPlus['lon']]).bindPopup(createPopup(aktivPlus), {
+            autoClose: false,     
+            closeOnClick: true   
+        }).setIcon(aktivPlusIcon));
 	});
 	markers['aktivesPlus'] = aktivPlus_markers;
 });
@@ -197,7 +212,10 @@ fetchArray('assets/aktivPlus_latlon.csv').then(aktivesPlus => {
 fetchArray('assets/activities_latlon.csv').then(activities => {
     act_markers = [];
 	activities.forEach(activity => {
-		act_markers.push(L.marker([activity['lat'], activity['lon']]).bindPopup(createPopup(activity)).setIcon(activitiesIcon));
+		act_markers.push(L.marker([activity['lat'], activity['lon']]).bindPopup(createPopup(activity), {
+            autoClose: false,      
+            closeOnClick: true    
+        }).setIcon(activitiesIcon));
 	});
 	markers['activities'] = act_markers;
 });
@@ -205,7 +223,10 @@ fetchArray('assets/activities_latlon.csv').then(activities => {
 fetchArray('assets/alarmes_latlon.csv').then(alarmes => {
     alarm_markers = [];
 	alarmes.forEach(alarm => {
-		alarm_markers.push(L.marker([alarm['lat'], alarm['lon']]).bindPopup(createPopup(alarm)).setIcon(telealarmIcon));
+		alarm_markers.push(L.marker([alarm['lat'], alarm['lon']]).bindPopup(createPopup(alarm), {
+            autoClose: false,      
+            closeOnClick: true    
+        }).setIcon(telealarmIcon));
 	});
 	markers['alarmes'] = alarm_markers;
 });
@@ -213,7 +234,10 @@ fetchArray('assets/alarmes_latlon.csv').then(alarmes => {
 fetchArray('assets/logementsEncadres_latlon.csv').then(logementsEncadres => {
     log_markers = [];
 	logementsEncadres.forEach(logementEncadre => {
-		log_markers.push(L.marker([logementEncadre['lat'], logementEncadre['lon']]).bindPopup(createPopup(logementEncadre)).setIcon(logementEncadreIcon));
+		log_markers.push(L.marker([logementEncadre['lat'], logementEncadre['lon']]).bindPopup(createPopup(logementEncadre), {
+            autoClose: false,      
+            closeOnClick: true    
+        }).setIcon(logementEncadreIcon));
 	});
 	markers['logementsEncadres'] = log_markers;
 });
@@ -292,9 +316,31 @@ function onEachFeature(feature, layer) {
     // Build popup content from feature properties
     let popupContent = '<div class="custom-popup-content">';
     if (feature.properties) {
-        for (const [key, value] of Object.entries(feature.properties)) {
-            popupContent += `<p><strong>${key}:</strong> ${value}</p>`;
+        // Get the LAU2 ID to look up population ratio
+        const lau2Id = parseInt(feature.properties['LAU2']);
+        let ratioValue = 'N/A';
+        
+        if (popRatioData && !isNaN(lau2Id)) {
+            const matchingData = popRatioData.find(pop_data => 
+                parseInt(pop_data['geo_id']) === lau2Id &&
+                selection['gender'].toLowerCase() === pop_data['sex'].toLowerCase() &&
+                selection['age'].toLowerCase() === pop_data['age_class'].toLowerCase()
+            );
+            
+            if (matchingData && matchingData['ratio']) {
+                ratioValue = (parseFloat(matchingData['ratio'])).toFixed(2) + '%';
+            }
         }
+        
+        // Add other properties
+        for (const [key, value] of Object.entries(feature.properties)) {
+            if (key !== 'LAU2') {
+                popupContent += `<p><strong>${key}:</strong> ${value}</p>`;
+            }
+        }
+        // Add population ratio
+        popupContent += `<p><strong>Population Ratio:</strong> ${ratioValue}</p>`;
+        
     }
     popupContent += '</div>';
     customPopup.setContent(popupContent);
@@ -477,15 +523,14 @@ function updateVisualization(propertyName, propertyValue) {
         style: (feature) => style(id_to_index, feature, min, max),
         onEachFeature: onEachFeature
     }).addTo(map);
-   
-   /*
-    // Update legend
-    map.eachLayer(layer => {
-        if (layer instanceof L.Control && layer.getContainer().className.includes('legend')) {
-            map.removeControl(layer);
-        }
-    });
-    //addLegend(minMax, propertyName);*/
+       
+    // UPDATE LEGEND HERE
+    const legendMin = document.getElementById('legend-min');
+    const legendMax = document.getElementById('legend-max');
+    if (legendMin && legendMax) {
+        legendMin.textContent = (min).toFixed(1) + '%';
+        legendMax.textContent = (max).toFixed(1) + '%';
+    }
 };
  
 // Add event listeners to all radio buttons
@@ -522,29 +567,30 @@ fetch('assets/LIMADM_COMMUNES.geojson')
         updateVisualization('gender', 'Total')
         console.log('GeoJSON loaded successfully');
 		
-		// Create a legend control
-		var legend = L.control({position: 'bottomleft'});
-
-		legend.onAdd = function(map) {
-			var div = L.DomUtil.create('div', 'legend color-bar-legend');
-			
-			// Create color gradient from white to #dfc000
-			div.innerHTML = `
-				<h4>Intensity Scale</h4>
-				<div class="color-bar">
-					<div class="color-gradient"></div>
-					<div class="color-labels">
-						<span>0%</span>
-						<span>100%</span>
-					</div>
-				</div>
-			`;
-			
-			return div;
-		};
-
-		// Add legend to map
-		legend.addTo(map);
+        // CREATE LEGEND HERE - around line 450
+        window.legendControl = L.control({position: 'bottomleft'});
+        
+        window.legendControl.onAdd = function(map) {
+            var div = L.DomUtil.create('div', 'legend color-bar-legend');
+            div.id = 'legend-container';
+            
+            const minPercent = (minMaxLegend[0]).toFixed(1);
+            const maxPercent = (minMaxLegend[1]).toFixed(1);
+            
+            div.innerHTML = `
+                <h4>Population Ratio</h4>
+                <div class="color-bar">
+                    <div class="color-gradient"></div>
+                    <div class="color-labels">
+                        <span id="legend-min">${minPercent}%</span>
+                        <span id="legend-max">${maxPercent}%</span>
+                    </div>
+                </div>
+            `;
+            return div;
+        };
+        
+        window.legendControl.addTo(map);
     })
     .catch(error => {
         console.error('Error loading GeoJSON:', error);
