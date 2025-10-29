@@ -132,7 +132,7 @@ function createPopup(dict) {
   };
     if (dict) {
 		const showFirst = ['Nom', 'nom', 'Name', 'name'];
-		const showNever = ['Section', 'Numero'];
+		const showNever = ['Section', 'Numero', 'Ville', 'Page', 'Year'];
 		showFirst.forEach(key => {
 			value = dict[key];
 			if (value && value.length > 0)
