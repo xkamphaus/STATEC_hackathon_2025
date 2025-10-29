@@ -292,7 +292,7 @@ function onEachFeature(feature, layer) {
                 if (popupElement) {
                     popupElement.style.position = 'fixed';
                     popupElement.style.top = '10px';
-                    popupElement.style.left = '10px';
+                    popupElement.style.left = '40px';
                     popupElement.style.transform = 'none'; // Remove leaflet's positioning
                 }
             }
@@ -306,12 +306,14 @@ function onEachFeature(feature, layer) {
             }
         }
     });
-    
-    // Click popup functionality has been removed
+	
+	// Close popup on zoom
+	map.on('zoomstart', function() {
+    if (layer.customPopup && layer.customPopup.isOpen()) {
+        layer.customPopup.remove();
+    }
+});
 }
-
-// Add all markers to map initially
-//Object.values(markers).flat().forEach(marker => marker.addTo(map));
 
 // Checkbox event listeners
 document.getElementById('mark_hebergement').addEventListener('change', function(e) {
