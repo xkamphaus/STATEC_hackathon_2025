@@ -7,19 +7,18 @@
 ### 🧭 Overview
 An interactive map allowing you to seeing aging and access at a glance in Luxembourg. 
  
-**Repository:** [GitHub repo link]  
-**Presentation:** [Slides or PDF link]
+**Repository:** [GitHub repo link](https://github.com/xkamphaus/STATEC_hackathon_2025)
 
 ---
 
 ### 👥 Team Members
-| Name | Contact | 
+| Name | Affiliation | 
 |------|------|
-| Daniel | Daniel.MICHULKE@men.lu |
-| Nevena | Nevena.ZHELYAZKOVA@men.lu | 
-| Nour | nour.bouzahzah@men.lu | 
-| Xavier | Xavier.Kamphaus@men.lu | 
-| Zeno | Zeno.PERACCHIONE@men.lu | 
+| Daniel | MENEJ-SCRIPT |
+| Nevena | MENEJ-SCRIPT | 
+| Nour | MENEJ | 
+| Xavier | MENEJ-SCRIPT | 
+| Zeno | MENEJ-SCRIPT | 
 
 ---
 
@@ -55,11 +54,11 @@ This tool integrates key public datasets to support smarter, more equitable plan
 
 - Development tools:​
 
---Mapping: Leaflet / Mapbox​
+    - Mapping: Leaflet / Mapbox​
 
---Data processing: Python / R​
+    - Data processing: Python / R​
 
---Front-end: HTML/CSS/JavaScript (if interactive web app)​
+    - Front-end: HTML/CSS/JavaScript (if interactive web app)​
 
 - Innovation:​
 
@@ -71,14 +70,14 @@ Easy to expand (add more services, filters, or metrics)​
 
 - Policy information
 
---Identify underserved areas → support planning​
+    - Identify underserved areas → support planning​
 
---Improve accessibility for seniors​
+    - Improve accessibility for seniors​
 
 - Future possibilities:​
 
---Add public transport routes, community centers​
+    - Add public transport routes, community centers​
 
---Predictive modeling for population aging trends​
+    - Predictive modeling for population aging trends​
 
---Mobile-friendly interface for citizens
+    - Mobile-friendly interface for citizens
