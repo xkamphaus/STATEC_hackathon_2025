@@ -7,7 +7,7 @@
 ### 🧭 Overview
 An interactive map allowing you to see at a glance the location of service providers for the elderly in combination with the population density by municipality of the to-be-discussed age ranges in Luxembourg. 
 
-![(Screenshot of the dashboard)](../manual_data_imports/dashboard_screenshot.png)
+![(Screenshot of the dashboard)](/manual_data_imports/dashboard_screenshot.png)
 
 **Repository:** [GitHub repo link](https://github.com/xkamphaus/STATEC_hackathon_2025)
 
